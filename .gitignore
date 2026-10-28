@@ -1,0 +1,5 @@
+/terraform-provider-gemini
+/dist/
+.terraform/
+*.tfstate*
+.terraform.lock.hcl
