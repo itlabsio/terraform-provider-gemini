@@ -61,6 +61,10 @@ func (f *fakeAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": "no token"})
 		return
 	}
+	if r.Method != http.MethodGet && r.Header.Get("X-Gemini-Managed-By") != "terraform" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "missing X-Gemini-Managed-By"})
+		return
+	}
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	p := r.URL.Path

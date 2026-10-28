@@ -90,6 +90,9 @@ func (c *Client) do(ctx context.Context, method, path string, in, out any) error
 		return err
 	}
 	req.Header.Set("Accept", "application/json")
+	// По нему backend помечает созданное/изменённое как managed_by = terraform
+	// (бейдж в UI). Старый backend заголовок просто игнорирует.
+	req.Header.Set("X-Gemini-Managed-By", "terraform")
 	if in != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -123,6 +126,7 @@ type Project struct {
 	Name          string    `json:"name"`
 	InstanceCount int       `json:"instance_count"`
 	CreatedBy     string    `json:"created_by"`
+	ManagedBy     string    `json:"managed_by"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 
